@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    
+  </head>
+  <body>
+      <main class="py-5 px-2">
+          <h1 class="font-bold nowrap text-center text-3xl">Youtube Downloader</h1>
+          <form class="max-w-sm mx-auto mt-3" id="submitForm">
+              <div class="mb-5">
+                  <label for="url" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your Playlist Youtube URL</label> <input type="text" id="url" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="https://youtube.com/playlist?list=RDvXXW_1NUpYo&playnext=1&si=iBKCfdnGfuAxWSl2" required /> </div>
+                  <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+          </form>
+          <div class="text-lg font-bold mt-5" id="loading">
+       
+          </div>
+          
+          <div class="mt-5 hidden" id="result_container">                           
+<div class="w-full max-w-md p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+    <div class="flex items-center justify-between mb-4">
+        <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">Result Playlist</h5>
+   </div>
+   <div class="flow-root">
+        <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700" id="result_playlist">            
+            
+        </ul>
+   </div>
+   
+   
+
+</div>
+
+              
+          </div>
+          
+      </main>
+      
+      
+
+<!-- Main modal -->
+<div id="static-modal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                    Download
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="static-modal" id="btn_close_modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-4 md:p-5 space-y-4">
+                
+                <div class="d-flex flex-column p-2" id="downloadContent">
+                    
+                    
+                    
+                </div>
+                
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+      
+      
+      
+  </body>
+  <script src="index.js"></script>
+</html>
