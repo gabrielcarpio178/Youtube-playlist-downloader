@@ -62,7 +62,7 @@ function displayResultPlaylist(data){
                         </p>
                     </div>
                     
-                    <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-3 py-1.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onclick="downloadContent('${data.snippet.resourceId.videoId}', '${data.snippet.title}')">Download</button>                    
+                    <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-3 py-1.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onclick="downloadContent('${data.snippet.resourceId.videoId}', '${data.snippet.title}', '${data.snippet.thumbnails.default.url}')">Download</button>                    
                 </div>
             </li>`
     
@@ -70,9 +70,10 @@ function displayResultPlaylist(data){
             
 }
 
-function downloadContent(videoId,title){
-    
-    $("#static-modal").classList.remove("hidden")            
+function downloadContent(videoId,title, thumbnail){ 
+     
+    $("#static-modal").classList.remove("hidden") 
+    $("#static-modal-history").classList.add("hidden")           
     const contentHtml = `
         
         <iframe class="w-[100%] h-64" src="https://youtube.com/embed/${videoId}" allow="accelerometer">
@@ -88,7 +89,7 @@ function downloadContent(videoId,title){
        
 
         <div class="flex flex-column mt-4">
-            <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onclick="fetchUrlDownload('${videoId}')">MP3</button>
+            <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onclick="fetchUrlDownload('${videoId}', '${thumbnail}','${title}')">MP3</button>
         </div>
     `
     $("#downloadContent").innerHTML = contentHtml
@@ -101,7 +102,7 @@ function $(element){
     return document.querySelector(element);
 }
 
-async function fetchUrlDownload(url_id){    
+async function fetchUrlDownload(url_id, thumbnail, title){    
     const response = await fetch(`https://youtube-mp36.p.rapidapi.com/dl?id=${url_id}`,{
         method: 'get',
         headers: {
@@ -109,9 +110,66 @@ async function fetchUrlDownload(url_id){
             'x-rapidapi-host': 'youtube-mp36.p.rapidapi.com',
            'x-rapidapi-key':'3ca26f1ec9msh45078f985bdafd6p1338aajsn896d4762287f'
         }
-    }).then(res=>{                               
-        return res.json();
-    }).then(data=>{
-        window.open(data.link)
+    });
+    const data = await response.json()
+    window.open(data.link)
+    downloadHistory(url_id, title, thumbnail)
+}
+
+function historyShow(){
+    $("#static-modal-history").classList.remove('hidden')
+    
+    var localHistory =localStorage.getItem("historyDownload")!=null?localStorage.getItem("historyDownload"):[]
+    let htmlHistory = ''    
+    JSON.parse(localHistory).forEach(history=>{
+       htmlHistory += displayHistory(history)
     })
-      }
+    
+    $("#historyContent").innerHTML = htmlHistory
+    
+    
+    
+}
+
+function displayHistory(history){
+    const historyData = JSON.parse(history)
+    
+    return `<li class="pt-3 pb-0 sm:pt-4">
+                <div class="flex items-center ">
+                    <div class="shrink-0">
+                        <img class="w-8 h-8 rounded-full" src="${historyData.thumbnail}" alt="Thomas image">
+                    </div>
+                    <div class="flex-1 min-w-0 ms-4">
+                        <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                            ${historyData.title}
+                        </p>
+                        
+                    </div>
+                    
+                    <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-3 py-1.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onclick="downloadContent('${history.dataLink}', '${historyData.title}', '${historyData.thumbnail}')">Download</button>                    
+                </div>
+            </li>`
+    
+}
+
+
+function closeHistory() {
+    $("#static-modal-history").classList.add('hidden')
+}
+
+function downloadHistory(dataLink, title, thumbnail){    
+    var localHistory =localStorage.getItem("historyDownload")!=null?JSON.parse(localStorage.getItem("historyDownload")):[]
+    
+    const dataDownload = {
+        dataLink:dataLink,
+        title:title,
+        thumbnail:thumbnail
+    }
+    
+       localHistory.push(JSON.stringify(dataDownload))
+    
+    localStorage.setItem("historyDownload",JSON.stringify(localHistory))
+}
+
+
+        
