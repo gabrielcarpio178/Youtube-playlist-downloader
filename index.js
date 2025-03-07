@@ -19,7 +19,7 @@ function getYouTubePlaylistId(url) {
 
 async function fetchId(playlistId) {
     
-    $("#loading").innerHTML = "loading..."
+    $("#loading").innerHTML = "Loading..."
     
     try{
         const fetchData = await fetch(`https://youtube.googleapis.com/youtube/v3/playlistItems?part=id,snippet&maxResults=50&playlistId=${playlistId}&key=AIzaSyArubNG1C2EXk-UmxOO4sRn7X3YOlRU0uc`)
